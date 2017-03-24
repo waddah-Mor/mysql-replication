@@ -4,7 +4,7 @@
 
 ### We will use Docker-Compose to test this method.
 
-###This will cover two scenarios:
+### This will cover two scenarios:
 
 1.  Two MySQL images(container).
   *   First image will be the Master MySQL.
@@ -16,9 +16,9 @@
  
 ---
 
-##Two MySQL Images(container):
+## Two MySQL Images(container):
 
-###Here's the main steps to complete this scenario:
+### Here's the main steps to complete this scenario:
 1. Create and configure docker-compose.yml.
  * Two [MySQL](https://hub.docker.com/_/mysql/) images.
  * Networks setting.
@@ -32,14 +32,14 @@
 
 ---
 
-###Step 1
+### Step 1
 Will start by first creating **docker-compose.yml** file and configure it as the following:
 
 Under *services* will add two MySQL images. Will call the first image *master* and the second one *slave*.
 
 - *master* and *slave* will be almost identical.
 
-####**Master Image/Container Configuration:**
+#### **Master Image/Container Configuration:**
 Under the *environment* will pass two variables:
 
 1. Set user root password.
@@ -85,7 +85,7 @@ Under *networks* will link this container to docker-compose network and will set
      ipv4_address: 177.18.0.10
 ```
 
-####**Slave Image/Container Configuration:**
+#### **Slave Image/Container Configuration:**
 Under the *environment* will pass two variables:
 
 1. Set user root password.
@@ -141,7 +141,7 @@ Under *networks* will link this container to docker-compose network and will set
      ipv4_address: 177.18.0.11
 ```
 
-####**[Networks Configuration](https://runnable.com/docker/docker-compose-networking):**
+#### **[Networks Configuration](https://runnable.com/docker/docker-compose-networking):**
 Under the *config* will set:
 
 1. Subnet.
@@ -163,7 +163,7 @@ Under the *config* will set:
 
 ---
 
-###Step 2
+### Step 2
 This step is pretty forword, we just start up docker-compose and make sure that everything is working.
 
 **First** in the "terminal" we "cd" into the directory where *docker-compose.yml* is located then start it up in the background (to be able to use terminal later).
@@ -189,7 +189,7 @@ This step is pretty forword, we just start up docker-compose and make sure that 
 ---
 
 
-###Step 3
+### Step 3
 Login to master MySQL and create dummy table and data.
 
 **1** we access master container
@@ -236,7 +236,7 @@ INSERT INTO books VALUES
 
 ---
 
-###Step 4
+### Step 4
 We simply follow the steps in the [blog](https://plusbryan.com/mysql-replication-without-downtime) to set up mysql replication without downtime.
 
 However, there are a few changing we will do to make it dump only one DB insteal of dumping all DBs. Also, since we are in docker containers we will copy the dumped file through the mounted volumes between the two containers not through "scp".
@@ -284,9 +284,9 @@ STOP SLAVE;SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;START SLAVE;
 
 ---
 
-##One MySQL image(container) and one localhost MySQL:
+## One MySQL image(container) and one localhost MySQL:
 
-###Here's the main steps to complete this scenario:
+### Here's the main steps to complete this scenario:
 1. Create and configure docker-compose.yml.
  * One [MySQL](https://hub.docker.com/_/mysql/) image.
  * Networks setting.
@@ -302,14 +302,14 @@ Also, we will suppose that we already have a wanted DB in our localhost, that wi
 
 ---
 
-###Step 1
+### Step 1
 The **docker-compose.yml** file will have only *slave and networks* instead of having *master, slave and networks*.
 Also, *slave and networks* are exactly the same but will delete the **link** part from slave since we don't have *master* container.
 
-###Step 2
+### Step 2
 Again exactly the same.
 
-###Step 3
+### Step 3
 We simply follow the steps in the [blog](https://plusbryan.com/mysql-replication-without-downtime) to set up mysql replication without downtime.
 
 However, there are a few changing we will do to make it dump only one DB insteal of dumping all DBs. Also, since we are in docker container we will copy the dumped file through the mounted volume between localhost and slave (dbconfig-s) not through "scp".

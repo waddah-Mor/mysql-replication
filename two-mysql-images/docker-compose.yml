@@ -1,0 +1,38 @@
+version: '2'
+services:
+
+ master:  
+  image: mysql
+  container_name: master
+  environment:
+   - MYSQL_ROOT_PASSWORD=root
+   - MYSQL_DATABASE=master_db
+  volumes:
+      - ./dbconfig-m:/etc/mysql/dbconfig
+  networks:
+   app_net:
+     ipv4_address: 177.18.0.10
+ 
+ slave:  
+  image: mysql
+  container_name: slave
+  environment:
+   - MYSQL_ROOT_PASSWORD=root
+   - MYSQL_DATABASE=master_db
+  volumes:
+      - ./dbconfig-s:/etc/mysql/dbconfig
+  links:
+   - "master:mysql"
+  networks:
+   app_net:
+     ipv4_address: 177.18.0.11
+      
+
+networks:
+  app_net:
+    driver: bridge
+    ipam:
+        driver: default
+        config:
+            - subnet: 177.18.0.0/24
+              gateway: 177.18.0.1
